@@ -928,7 +928,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1387535738}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d5d02788b11a074479a35b9c24d07230, type: 3}
   m_Name: 
@@ -1571,6 +1571,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44443d6de15399d4585e11a082f259f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 1652716725}
   unwalkableMask:
     serializedVersion: 2
     m_Bits: 1024
