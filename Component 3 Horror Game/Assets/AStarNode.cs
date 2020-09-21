@@ -5,14 +5,23 @@ using UnityEngine;
 
 public class AStarNode
 {
-    private bool isWalkable;
-    private Vector3 worldPosition;
+    public bool isWalkable;
+    public Vector3 worldPosition;
+    public int gridX, gridY;
 
-    public bool IsWalkable { get => isWalkable; set => isWalkable = value; }
-    public Vector3 WorldPosition { get => worldPosition; set => worldPosition = value; }
+    public int gCost, hCost;
+    public AStarNode parent;
 
-    public AStarNode(bool isWalkable, Vector3 worldPosition) {
-        this.isWalkable = isWalkable;
-        this.worldPosition = worldPosition;
+    public AStarNode(bool _isWalkable, Vector3 _worldPosition, int _gridX, int _gridY) {
+        this.isWalkable = _isWalkable;
+        this.worldPosition = _worldPosition;
+        this.gridX = _gridX;
+        this.gridY = _gridY;
+    }
+
+    public int fCost {
+        get {
+            return gCost + hCost;
+        }
     }
 }

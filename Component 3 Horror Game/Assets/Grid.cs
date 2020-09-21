@@ -7,6 +7,7 @@ using UnityEngine;
 public class Grid : MonoBehaviour
 {
     public Transform player;
+    public Transform target;
     public LayerMask unwalkableMask;
     public Vector2 gridWorldSize;
     public float nodeRadius;
@@ -16,7 +17,7 @@ public class Grid : MonoBehaviour
     int gridSizeX, gridSizeY;
 
     void Start() {
-        nodeDiameter = nodeRadius;
+        nodeDiameter = nodeRadius * 2;
         //Calculate the X and Y of the grid so that the number of nodes perfectly fits in
         gridSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);
         gridSizeY = Mathf.RoundToInt(gridWorldSize.y / nodeDiameter);
@@ -32,12 +33,31 @@ public class Grid : MonoBehaviour
             for (int j = 0; j < gridSizeY; j++)
             {
                 //Calculate the position of each node
-                Vector3 worldPoint = bottomLeft + Vector3.right * (i * nodeRadius + nodeDiameter) + Vector3.forward * (j * nodeRadius + nodeDiameter);
+                Vector3 worldPoint = bottomLeft + Vector3.right * (i * nodeDiameter + nodeRadius) + Vector3.forward * (j * nodeDiameter + nodeRadius);
                 //Check if any of the nodes are colliding with objects that are unwalkable.
                 bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius, unwalkableMask));
-                grid[i, j] = new AStarNode(walkable, worldPoint);
+                grid[i, j] = new AStarNode(walkable, worldPoint, i, j);
             }
         }
+    }
+
+    public List<AStarNode> GetNeighbours(AStarNode node) {
+        List<AStarNode> neighbours = new List<AStarNode>();
+        for (int x = -1; x <= 1; x++)
+        {
+            for (int y = -1; y <= 1; y++)
+            {
+                if (x == 0 && y == 0) {
+                    continue;
+                }
+                int checkX = node.gridX + x;
+                int checkY = node.gridY + y;
+                if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY) {
+                    neighbours.Add(grid[checkX, checkY]);
+                }
+            }
+        }
+        return neighbours;
     }
 
     public AStarNode NodeFromWorldPoint(Vector3 worldPosition) {
@@ -51,18 +71,27 @@ public class Grid : MonoBehaviour
         return grid[x, y];
     }
 
+    public List<AStarNode> path;
     void OnDrawGizmos() {
         Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
         if (grid != null) {
             AStarNode playerNode = NodeFromWorldPoint(player.position);
+            AStarNode targetNode = NodeFromWorldPoint(target.position);
             foreach (AStarNode node in grid) {
                 //Colour each node either white (walkable)or red (unwalkable) 
-                Gizmos.color = (node.IsWalkable) ? Color.white : Color.red;
-                if (node.WorldPosition == playerNode.WorldPosition) {
+                Gizmos.color = (node.isWalkable) ? Color.white : Color.red;
+                if (path != null) {
+                    if (path.Contains(node)) {
+                        Gizmos.color = Color.black;
+                    }
+                }
+                if (playerNode.worldPosition == node.worldPosition){
                     Gizmos.color = Color.green;
+                } else if (targetNode.worldPosition == node.worldPosition) {
+                    Gizmos.color = Color.cyan;
                 }
                 //Then draw each cube in the editor based on its position
-                Gizmos.DrawCube(node.WorldPosition, Vector3.one * (nodeDiameter - 0.1f));
+                Gizmos.DrawCube(node.worldPosition, Vector3.one * (nodeDiameter - 0.1f));
             }
         }
     }
