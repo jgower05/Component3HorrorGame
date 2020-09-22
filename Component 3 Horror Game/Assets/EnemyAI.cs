@@ -8,23 +8,18 @@ using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
-    public Transform[] points;
+    public FindPath pathFinder;
+    [Range(0f, 15f)] public float enemySpeed;
+    public float enemyStamina;
+    public bool isMoving;
     public Transform goal;
-    private NavMeshAgent agent;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        agent = GetComponent<NavMeshAgent>();
-        agent.autoBraking = false;
-    }
 
     // Update is called once per frame
     void Update(){
-        agent.destination = goal.position;
+        if (pathFinder.hasDestinationBeenFound) {
+            isMoving = true;
+            pathFinder.CalculatePath(transform.position, goal.position);
+        }
     }
 
-    void NewGoalPosition() { 
-        
-    }
 }

@@ -6,14 +6,16 @@ public class FindPath : MonoBehaviour
 {
     public Grid grid;
     public Transform seeker, target;
+    public bool hasDestinationBeenFound = false;
 
     void Update()
     {
         CalculatePath(seeker.position, target.position);
     }
 
-    void CalculatePath(Vector3 startPosition, Vector3 endPosition) {
+    public void CalculatePath(Vector3 startPosition, Vector3 endPosition) {
         //Figure out the start and end nodes based on their object position
+        hasDestinationBeenFound = false;
         AStarNode startNode = grid.NodeFromWorldPoint(startPosition);
         AStarNode endNode = grid.NodeFromWorldPoint(endPosition);
         //First step of the algorithm is to establish the open and closed sets and
@@ -37,6 +39,7 @@ public class FindPath : MonoBehaviour
 
             if (currentNode == endNode) {
                 RetracePath(startNode, endNode);
+                hasDestinationBeenFound = true;
                 UnityEngine.Debug.Log("You've found the end position");
                 return;
             }
@@ -59,7 +62,7 @@ public class FindPath : MonoBehaviour
         }
     }
 
-    void RetracePath(AStarNode startNode, AStarNode endNode) {
+    public void RetracePath(AStarNode startNode, AStarNode endNode) {
         List<AStarNode> path = new List<AStarNode>();
         AStarNode currentNode = endNode;
         while (currentNode != startNode) {
