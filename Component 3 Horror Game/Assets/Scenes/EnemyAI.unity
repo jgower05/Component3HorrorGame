@@ -957,13 +957,17 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1387535738}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d5d02788b11a074479a35b9c24d07230, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  points: []
+  pathFinder: {fileID: 2102925253}
+  enemySpeed: 2
+  enemyStamina: 0
+  isMoving: 0
   goal: {fileID: 1652716725}
+  reachedNewDestination: 0
 --- !u!1 &1394915753
 GameObject:
   m_ObjectHideFlags: 0
@@ -1580,7 +1584,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1387535742}
-  target: {fileID: 1375663619}
+  target: {fileID: 1652716725}
   unwalkableMask:
     serializedVersion: 2
     m_Bits: 1024
@@ -1600,7 +1604,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 2102925252}
   seeker: {fileID: 1387535742}
-  target: {fileID: 1375663619}
+  target: {fileID: 1652716725}
+  hasDestinationBeenFound: 0
 --- !u!1001 &2111575003
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1616,7 +1621,7 @@ PrefabInstance:
     - target: {fileID: 5226674475014043992, guid: 8bede5fc66a834c4cb7d3c0f41446e29,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.2
+      value: 19.17
       objectReference: {fileID: 0}
     - target: {fileID: 5226674475014043992, guid: 8bede5fc66a834c4cb7d3c0f41446e29,
         type: 3}
@@ -1626,7 +1631,7 @@ PrefabInstance:
     - target: {fileID: 5226674475014043992, guid: 8bede5fc66a834c4cb7d3c0f41446e29,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.5
+      value: -13.84
       objectReference: {fileID: 0}
     - target: {fileID: 5226674475014043992, guid: 8bede5fc66a834c4cb7d3c0f41446e29,
         type: 3}

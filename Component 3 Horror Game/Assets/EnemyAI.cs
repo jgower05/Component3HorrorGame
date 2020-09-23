@@ -13,13 +13,32 @@ public class EnemyAI : MonoBehaviour
     public float enemyStamina;
     public bool isMoving;
     public Transform goal;
+    public bool reachedNewDestination;
+
+    private List<AStarNode> oldPath, newPath;
 
     // Update is called once per frame
     void Update(){
-        if (pathFinder.hasDestinationBeenFound) {
-            isMoving = true;
-            pathFinder.CalculatePath(transform.position, goal.position);
+        newPath = RequestPath(transform.position, goal.position);
+        if (oldPath != newPath) {
+            reachedNewDestination = false;
+            oldPath = newPath;
         }
+        if (newPath != null && !reachedNewDestination) {
+            MoveAlongPath();
+        }
+    }
+
+    public void MoveAlongPath() {
+        foreach (AStarNode pathNodes in newPath) {
+            transform.position = Vector3.MoveTowards(transform.position, pathNodes.worldPosition, enemySpeed);
+        }
+        reachedNewDestination = true;
+    }
+
+    public List<AStarNode> RequestPath(Vector3 startPos, Vector3 endPos) {
+        pathFinder.CalculatePath(startPos, endPos);
+        return pathFinder.path;
     }
 
 }

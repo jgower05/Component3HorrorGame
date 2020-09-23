@@ -7,11 +7,7 @@ public class FindPath : MonoBehaviour
     public Grid grid;
     public Transform seeker, target;
     public bool hasDestinationBeenFound = false;
-
-    void Update()
-    {
-        CalculatePath(seeker.position, target.position);
-    }
+    public List<AStarNode> path;
 
     public void CalculatePath(Vector3 startPosition, Vector3 endPosition) {
         //Figure out the start and end nodes based on their object position
@@ -37,6 +33,7 @@ public class FindPath : MonoBehaviour
             openSet.Remove(currentNode);
             closedSet.Add(currentNode);
 
+            //Checks to see if the algorithm as found the target position, if it has then we can trace the path
             if (currentNode == endNode) {
                 RetracePath(startNode, endNode);
                 hasDestinationBeenFound = true;
@@ -61,9 +58,9 @@ public class FindPath : MonoBehaviour
             }
         }
     }
-
+    //Traces the path outlined by the algorithm once it is complete.
     public void RetracePath(AStarNode startNode, AStarNode endNode) {
-        List<AStarNode> path = new List<AStarNode>();
+        path = new List<AStarNode>();
         AStarNode currentNode = endNode;
         while (currentNode != startNode) {
             path.Add(currentNode);
@@ -73,6 +70,7 @@ public class FindPath : MonoBehaviour
         grid.path = path;
     }
 
+    //Retrives the distance between two nodes
     int GetDistance(AStarNode nodeA, AStarNode nodeB) {
         int distanceX = Mathf.Abs(nodeA.gridX - nodeB.gridX);
         int distanceY = Mathf.Abs(nodeA.gridY - nodeB.gridY);
