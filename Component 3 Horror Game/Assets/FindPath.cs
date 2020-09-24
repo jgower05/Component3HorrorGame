@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Diagnostics;
 
 public class FindPath : MonoBehaviour
 {
@@ -9,35 +10,39 @@ public class FindPath : MonoBehaviour
     public bool hasDestinationBeenFound = false;
     public List<AStarNode> path;
 
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            UnityEngine.Debug.Log("Calculating path!");
+            CalculatePath(seeker.position, target.position);
+        }
+    }
+
     public void CalculatePath(Vector3 startPosition, Vector3 endPosition) {
         //Figure out the start and end nodes based on their object position
         hasDestinationBeenFound = false;
+        Stopwatch stopWatch = new Stopwatch();
+        stopWatch.Start();
+
         AStarNode startNode = grid.NodeFromWorldPoint(startPosition);
         AStarNode endNode = grid.NodeFromWorldPoint(endPosition);
         //First step of the algorithm is to establish the open and closed sets and
         // add the start node to the open set
-        List<AStarNode> openSet = new List<AStarNode>();
+        Heap<AStarNode> openSet = new Heap<AStarNode>(grid.MaxSize);
         HashSet<AStarNode> closedSet = new HashSet<AStarNode>();
         openSet.Add(startNode);
         //Now we need to loop through the open set to find the node with the smallest fCost and set it
         //as the current node
         while (openSet.Count > 0) {
-            AStarNode currentNode = openSet[0];
-            for (int i = 1; i < openSet.Count; i++)
-            {
-                if (openSet[i].fCost < currentNode.fCost || openSet[i].fCost == currentNode.fCost && openSet[i].hCost < currentNode.hCost)
-                {
-                    currentNode = openSet[i];
-                }
-            }
-            openSet.Remove(currentNode);
+            AStarNode currentNode = openSet.RemoveFirst();
             closedSet.Add(currentNode);
 
             //Checks to see if the algorithm as found the target position, if it has then we can trace the path
             if (currentNode == endNode) {
+                stopWatch.Stop();
                 RetracePath(startNode, endNode);
                 hasDestinationBeenFound = true;
-                UnityEngine.Debug.Log("You've found the end position");
+                UnityEngine.Debug.Log("Path found: " + stopWatch.ElapsedMilliseconds + " ms");
                 return;
             }
 

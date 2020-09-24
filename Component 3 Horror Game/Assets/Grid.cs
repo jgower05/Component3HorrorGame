@@ -24,6 +24,12 @@ public class Grid : MonoBehaviour
         CreateGrid();
     }
 
+    public int MaxSize {
+        get {
+            return gridSizeX + gridSizeY;
+        }
+    }
+
     //Generates grid of nodes based on these values
     void CreateGrid() {
         grid = new AStarNode[gridSizeX, gridSizeY];

@@ -31,7 +31,7 @@ public class EnemyAI : MonoBehaviour
 
     public void MoveAlongPath() {
         foreach (AStarNode pathNodes in newPath) {
-            transform.position = Vector3.MoveTowards(transform.position, pathNodes.worldPosition, enemySpeed);
+            transform.position = Vector3.MoveTowards(transform.position, pathNodes.worldPosition, enemySpeed / 10);
         }
         reachedNewDestination = true;
     }
