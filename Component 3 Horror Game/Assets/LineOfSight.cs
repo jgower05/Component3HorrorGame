@@ -10,14 +10,31 @@ public class LineOfSight : MonoBehaviour
     public LayerMask targetLayer;
     public LayerMask obstacleLayer;
 
+    public List<Transform> visibleTargets = new List<Transform>();
+
+    void Start() {
+        StartCoroutine("FindTargetsWithDelay", .2f);
+    }
+
+    IEnumerator FindTargetsWithDelay(float delay) {
+        while (true) {
+            yield return new WaitForSeconds(delay);
+            FindVisibleTargets();
+        }
+    }
+
     void FindVisibleTargets() {
+        visibleTargets.Clear();
         Collider[] targets = Physics.OverlapSphere(transform.position, radius, targetLayer);
         for (int i = 0; i < targets.Length; i++)
         {
             Transform target = targets[i].transform;
             Vector3 directionToTarget = (target.position - transform.position).normalized;
             if (Vector3.Angle(transform.forward, directionToTarget) < viewAngle / 2) {
-                //float distanceToTarget = Vector3.Distance();
+                float distanceToTarget = Vector3.Distance(transform.position, target.position);
+                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstacleLayer)) {
+                    visibleTargets.Add(target);
+                }
             }
         }
     }

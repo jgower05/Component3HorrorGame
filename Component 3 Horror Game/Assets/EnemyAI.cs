@@ -36,7 +36,7 @@ public class EnemyAI : MonoBehaviour
     public void MoveAlongPath() {
         foreach (AStarNode pathNodes in newPath) {
             transform.position = Vector3.MoveTowards(transform.position, pathNodes.worldPosition, enemySpeed * Time.deltaTime);
-            Quaternion targetRotation = Quaternion.LookRotation(pathNodes.worldPosition - transform.position);
+            Quaternion targetRotation = Quaternion.LookRotation(goal.position - transform.position);
             float step = Mathf.Min(rotationSpeed * Time.deltaTime, 1);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, step);
         }

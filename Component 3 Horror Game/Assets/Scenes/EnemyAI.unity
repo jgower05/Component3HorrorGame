@@ -800,14 +800,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 703a2729ae147e5459e2ffd35d9ec38e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 10
-  viewAngle: 98
+  radius: 30
+  viewAngle: 120
   targetLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2048
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 1024
+  visibleTargets: []
 --- !u!1 &1584532636
 GameObject:
   m_ObjectHideFlags: 0
@@ -1457,10 +1458,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 5226674475014043975, guid: 8bede5fc66a834c4cb7d3c0f41446e29,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 5226674475014043992, guid: 8bede5fc66a834c4cb7d3c0f41446e29,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 8.747461
+      value: -1.09
       objectReference: {fileID: 0}
     - target: {fileID: 5226674475014043992, guid: 8bede5fc66a834c4cb7d3c0f41446e29,
         type: 3}
@@ -1470,7 +1476,7 @@ PrefabInstance:
     - target: {fileID: 5226674475014043992, guid: 8bede5fc66a834c4cb7d3c0f41446e29,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -16.038279
+      value: 15.93
       objectReference: {fileID: 0}
     - target: {fileID: 5226674475014043992, guid: 8bede5fc66a834c4cb7d3c0f41446e29,
         type: 3}
