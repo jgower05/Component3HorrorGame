@@ -17,12 +17,15 @@ public class EnemyAI : MonoBehaviour
     public Transform goal;
     public bool reachedNewDestination;
 
+    public LineOfSight los;
+    public Transform playerChecker;
+
     private List<AStarNode> oldPath, newPath;
     private Transform oldGoal;
 
     // Update is called once per frame
     void FixedUpdate(){
-        newPath = RequestPath(transform.position, goal.position);
+        /*newPath = RequestPath(transform.position, goal.position);
         if (oldPath != newPath) {
             reachedNewDestination = false;
             oldPath = newPath;
@@ -30,7 +33,19 @@ public class EnemyAI : MonoBehaviour
         if (newPath != null && !reachedNewDestination)
         {
             MoveAlongPath();
-        } 
+        } */
+
+        //Move the enemy to the player if seen
+        playerChecker.GetComponent<Renderer>().material.color = Color.red;
+        if (los.visibleTargets != null) { //Checks to make sure the visible targets isn't null
+            foreach (Transform item in los.visibleTargets) 
+            {
+                goal = item; //Set the goal position as the visible target (player)
+                playerChecker.GetComponent<Renderer>().material.color = Color.green;
+                newPath = RequestPath(transform.position, goal.position); //Request a path from the A* pathfinding algorithm
+                MoveAlongPath();
+            }
+        }
 
     }
     public void MoveAlongPath() {
