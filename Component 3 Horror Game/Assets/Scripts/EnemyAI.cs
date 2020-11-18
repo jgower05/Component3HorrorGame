@@ -25,20 +25,12 @@ public class EnemyAI : MonoBehaviour
 
     // Update is called once per frame
     void FixedUpdate(){
-        /*newPath = RequestPath(transform.position, goal.position);
-        if (oldPath != newPath) {
-            reachedNewDestination = false;
-            oldPath = newPath;
-        }
-        if (newPath != null && !reachedNewDestination)
-        {
-            MoveAlongPath();
-        } */
 
         //Move the enemy to the player if seen
         playerChecker.GetComponent<Renderer>().material.color = Color.red;
-        if (los.visibleTargets != null) { //Checks to make sure the visible targets isn't null
-            foreach (Transform item in los.visibleTargets) 
+        if (los.visibleTargets != null)
+        { //Checks to make sure the visible targets isn't null
+            foreach (Transform item in los.visibleTargets)
             {
                 goal = item; //Set the goal position as the visible target (player)
                 playerChecker.GetComponent<Renderer>().material.color = Color.green;
@@ -51,9 +43,10 @@ public class EnemyAI : MonoBehaviour
     public void MoveAlongPath() {
         foreach (AStarNode pathNodes in newPath) {
             transform.position = Vector3.MoveTowards(transform.position, pathNodes.worldPosition, enemySpeed * Time.deltaTime);
+            /*
             Quaternion targetRotation = Quaternion.LookRotation(goal.position - transform.position);
             float step = Mathf.Min(rotationSpeed * Time.deltaTime, 1);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, step);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, step); */
         }
         reachedNewDestination = true;
     }

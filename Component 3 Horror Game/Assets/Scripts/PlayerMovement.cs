@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -13,8 +14,26 @@ public class PlayerMovement : MonoBehaviour
     public bool isRunning;
     public bool isSneaking;
 
+    public float maxHealth = 100f;
+    public float currentHealth = 100f;
+    public Slider slider;
+    public Slider staminaSlider;
+
+
+    void Start() {
+        //Sets the values for the Health Bar UI as soon as the game starts. 
+        slider.maxValue = maxHealth;
+        slider.value = maxHealth;
+        //Sets the values for the Stamina Bar UI as soon as the game starts.
+        staminaSlider.maxValue = playerMaxStamina;
+        staminaSlider.value = playerStamina;
+    }
+
     void FixedUpdate()
     {
+        slider.value = currentHealth;
+        staminaSlider.value = playerStamina;
+
         isRunning = Input.GetKey(KeyCode.LeftShift);
         isSneaking = Input.GetKey(KeyCode.LeftControl);
         if (isSneaking)
@@ -39,7 +58,7 @@ public class PlayerMovement : MonoBehaviour
 
     void RegenerateStamina() { //Regenerates stamina over time once the regen timer allows it to.
         if (staminaRegenTimer >= staminaTimeToRegen){
-            playerStamina = Mathf.Clamp(playerStamina + (5.0f * Time.deltaTime), 0.0f, playerMaxStamina);
+            playerStamina = Mathf.Clamp(playerStamina + (10.0f * Time.deltaTime), 0.0f, playerMaxStamina);
             //Mathf.Clamp keeps the stamina from regenerating above the maximum stamina value.
         }
         else{
@@ -55,5 +74,4 @@ public class PlayerMovement : MonoBehaviour
         Vector3 moveAmount = velocity * Time.deltaTime;
         transform.Translate(moveAmount);
     }
-
 }
