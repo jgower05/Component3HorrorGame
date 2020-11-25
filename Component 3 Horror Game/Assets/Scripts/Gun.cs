@@ -20,4 +20,8 @@ public class Gun : MonoBehaviour
         // is pressed. This will vary depending on the type of gun, for example, the
         //firing rate should be different
     }
+
+    public virtual void Reload() { 
+        //Handles the reloading of the gun.
+    }
 }

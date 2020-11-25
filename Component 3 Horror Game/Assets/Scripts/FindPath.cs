@@ -42,7 +42,7 @@ public class FindPath : MonoBehaviour
                 stopWatch.Stop();
                 RetracePath(startNode, endNode);
                 hasDestinationBeenFound = true;
-                UnityEngine.Debug.Log("Path found: " + stopWatch.ElapsedMilliseconds + " ms");
+                //UnityEngine.Debug.Log("Path found: " + stopWatch.ElapsedMilliseconds + " ms");
                 return;
             }
 
