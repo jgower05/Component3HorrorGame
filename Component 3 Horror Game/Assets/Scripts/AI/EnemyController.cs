@@ -14,7 +14,7 @@ public class EnemyController : MonoBehaviour
     public bool firstSetOfLegsMoving = true;
     public bool secondSetOfLegsMoving = false;
     float timeToWalk = 0f;
-    [SerializeField] float bodyOffset = 2f;
+    [SerializeField] float bodyOffset = 4f;
 
     public Transform player;
     [SerializeField] float offset;
@@ -26,10 +26,9 @@ public class EnemyController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    void FixedUpdate() {
-        //body.position = UpdateBodyPosition();
+    void LateUpdate() {
         //transform.position = Vector3.MoveTowards(transform.position, new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z), enemySpeed * Time.deltaTime);
-        Vector3 targetPosition = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z);
+        Vector3 targetPosition = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
         transform.LookAt(targetPosition); 
     }
 

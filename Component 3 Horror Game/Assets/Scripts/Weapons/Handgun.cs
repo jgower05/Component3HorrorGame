@@ -52,6 +52,11 @@ public class Handgun : Gun
         if ((ammoCount - MagazineCount) < 0)
         {
             this.magazineCount = ammoCount;
+            ammoCount = 0;
+        }
+        else if (magazineCount > 0) {
+            ammoCount -= MagazineCount - this.magazineCount;
+            this.magazineCount = MagazineCount;
         }
         else if (ammoCount <= 0)
         {

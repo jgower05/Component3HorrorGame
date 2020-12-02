@@ -21,7 +21,6 @@ public class IKManager : MonoBehaviour
 
     //Called before the first frame is called
     void Start() {
-        distanceThreshold = Random.Range(0.2f, 0.3f);
     }
 
     void FixedUpdate() {
