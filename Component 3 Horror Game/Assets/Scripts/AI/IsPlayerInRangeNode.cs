@@ -17,9 +17,11 @@ public class IsPlayerInRangeNode : Node
         float distance = Vector3.Distance(enemyUnit.position, target.position);
         if (distance < .2f)
         {
+            Debug.Log("Player can be seen -> SUCCESS");
             return NodeStates.SUCCESS;
         }
         else {
+            Debug.Log("Player cannot be seen -> FAILURE");
             return NodeStates.FAILURE;
         }
     }

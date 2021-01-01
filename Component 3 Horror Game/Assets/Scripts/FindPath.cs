@@ -6,17 +6,8 @@ using System.Diagnostics;
 public class FindPath : MonoBehaviour
 {
     public Grid grid;
-    public Transform seeker, target;
     public bool hasDestinationBeenFound = false;
     public List<AStarNode> path;
-
-    void Update() {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            UnityEngine.Debug.Log("Calculating path!");
-            CalculatePath(seeker.position, target.position);
-        }
-    }
 
     public void CalculatePath(Vector3 startPosition, Vector3 endPosition) {
         //Figure out the start and end nodes based on their object position

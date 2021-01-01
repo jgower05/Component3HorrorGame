@@ -13,6 +13,7 @@ public class LineOfSight : MonoBehaviour
 
     public List<Transform> visibleTargets = new List<Transform>();
     public List<Transform> visibleWaypoints = new List<Transform>(); //stores references to any waypoints located within the LOS
+    public bool isPlayerInLineOfSight = false;
 
     void Start() {
         StartCoroutine("FindTargetsWithDelay", .2f);
@@ -26,8 +27,8 @@ public class LineOfSight : MonoBehaviour
     }
 
     void FindVisibleTargets() {
+        isPlayerInLineOfSight = false;
         visibleTargets.Clear();
-        Collider[] waypoints = Physics.OverlapSphere(transform.position, radius, waypointLayer); //Another array created to store any waypoint instances
         Collider[] targets = Physics.OverlapSphere(transform.position, radius, targetLayer);
         for (int i = 0; i < targets.Length; i++)
         {
@@ -37,21 +38,10 @@ public class LineOfSight : MonoBehaviour
                 float distanceToTarget = Vector3.Distance(transform.position, target.position);
                 if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstacleLayer)) {
                     visibleTargets.Add(target);
+                    isPlayerInLineOfSight = true;
                 }
             }
         }
-        for (int i = 0; i < waypoints.Length; i++) //Goes through the waypoint array
-        {
-            Transform waypoint = waypoints[i].transform;
-            Vector3 directionToWaypoint = (waypoint.position - transform.position).normalized;
-            if (Vector3.Angle(transform.forward, directionToWaypoint) < viewAngle / 2) { //Check if the waypoint is in the line of sight
-                float distanceToWaypoint = Vector3.Distance(transform.position, waypoint.position);
-                if (!Physics.Raycast(transform.position, directionToWaypoint, distanceToWaypoint, waypointLayer)) { //Make sure no obstacles blocking waypoint
-                    visibleWaypoints.Add(waypoint);  
-                }
-            }
-        }
-
     }
 
     public Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal) {

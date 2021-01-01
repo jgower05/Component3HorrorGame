@@ -14,9 +14,6 @@ public abstract class Node : MonoBehaviour
         get { return m_nodeState; }
     }
 
-    public Node() { 
-    }
-
     /*Determines the state of the node based on a set of conditions 
     Will use polymorphism in different scripts to override this function. */
     public abstract NodeStates Evaluate();

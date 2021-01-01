@@ -28,8 +28,8 @@ public class EnemyController : MonoBehaviour
 
     void LateUpdate() {
         //transform.position = Vector3.MoveTowards(transform.position, new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z), enemySpeed * Time.deltaTime);
-        Vector3 targetPosition = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
-        transform.LookAt(targetPosition); 
+        //Vector3 targetPosition = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
+        //transform.LookAt(targetPosition); 
     }
 
     private Vector3 UpdateBodyPosition() { //Update the body position based on the average y position of the 8 legs. 

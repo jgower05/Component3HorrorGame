@@ -30,18 +30,16 @@ public class ChaseNode : Node
         float distance = Vector3.Distance(enemyUnit.position, los.visibleTargets[0].position);
         if (los.visibleTargets != null && distance > 0.2f)
         {
+            Debug.Log("Chase player");
             //Enemy can chase player
             newPath = RequestPath(enemyUnit.position, los.visibleTargets[0].position);
             MoveAlongPath();
             return NodeStates.RUNNING;
         }
-        else if (los.visibleTargets != null && distance <= 0.2f)
+        else
         {
             //Player is in range of attack
             return NodeStates.SUCCESS;
-        }
-        else {
-            return NodeStates.FAILURE;
         }
     }
 
@@ -50,9 +48,8 @@ public class ChaseNode : Node
     {
         foreach (AStarNode pathNodes in newPath)
         {
-            enemyUnit.position = Vector3.MoveTowards(enemyUnit.position, pathNodes.worldPosition, EnemySpeed * Time.deltaTime);
-            Vector3 targetDestination = new Vector3(target.position.x, enemyUnit.position.y, target.position.z);
-            enemyUnit.LookAt(targetDestination);
+            Vector3 newPos = new Vector3(pathNodes.worldPosition.x, enemyUnit.position.y, pathNodes.worldPosition.z);
+            enemyUnit.position = Vector3.MoveTowards(enemyUnit.position, newPos, EnemySpeed * Time.deltaTime);
         }
         reachedNewDestination = true;
     }

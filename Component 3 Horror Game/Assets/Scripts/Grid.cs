@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class Grid : MonoBehaviour
 {
-    public Transform player;
-    public Transform target;
     public LayerMask unwalkableMask;
     public Vector2 gridWorldSize;
     public float nodeRadius;
@@ -81,8 +79,6 @@ public class Grid : MonoBehaviour
     void OnDrawGizmos() {
         Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
         if (grid != null) {
-            AStarNode playerNode = NodeFromWorldPoint(player.position);
-            AStarNode targetNode = NodeFromWorldPoint(target.position);
             foreach (AStarNode node in grid) {
                 //Colour each node either white (walkable)or red (unwalkable) 
                 Gizmos.color = (node.isWalkable) ? Color.white : Color.red;
@@ -91,14 +87,9 @@ public class Grid : MonoBehaviour
                         Gizmos.color = Color.black;
                     }
                 }
-                if (playerNode.worldPosition == node.worldPosition){
-                    Gizmos.color = Color.green;
-                } else if (targetNode.worldPosition == node.worldPosition) {
-                    Gizmos.color = Color.cyan;
-                }
                 //Then draw each cube in the editor based on its position
                 Gizmos.DrawCube(node.worldPosition, Vector3.one * (nodeDiameter - 0.1f));
             }
         }
-    }
+    } 
 }
