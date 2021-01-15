@@ -260,6 +260,12 @@ MonoBehaviour:
   staminaTimeToRegen: 3
   isRunning: 0
   isSneaking: 0
+  maxHealth: 100
+  currentHealth: 100
+  slider: {fileID: 0}
+  staminaSlider: {fileID: 0}
+  mouseSesitivity: 100
+  camera: {fileID: 0}
 --- !u!54 &5226674475014043993
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -374,8 +380,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14eff19afdd006c4c99b665f5a273aee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mouseSesitivity: 70
+  mouseSensitivity: 100
   playerBody: {fileID: 5226674475014043992}
+  gunRecoil: {fileID: 0}
 --- !u!1 &5226674475840025283
 GameObject:
   m_ObjectHideFlags: 0

@@ -19,6 +19,9 @@ public class PlayerMovement : MonoBehaviour
     public Slider slider;
     public Slider staminaSlider;
 
+    public float mouseSesitivity = 100f;
+    public Transform camera;
+    float xRotation = 0f;
 
     void Start() {
         //Sets the values for the Health Bar UI as soon as the game starts. 
@@ -42,13 +45,16 @@ public class PlayerMovement : MonoBehaviour
             playerSpeed = maxSpeed - 1.5f;
             MoveAround();
             RegenerateStamina();
-        } 
-        if ((isRunning && Input.GetKey(KeyCode.W)) && playerStamina > 0.0f) {
+        }
+        if ((isRunning && Input.GetKey(KeyCode.W)) && playerStamina > 0.0f)
+        {
             playerSpeed = maxSpeed + 1.5f;
             MoveAround();
             playerStamina = Mathf.Clamp(playerStamina - (20.0f * Time.deltaTime), 0.0f, playerMaxStamina);
             staminaRegenTimer = 0.0f;
-        } else if ((playerStamina < playerMaxStamina) && !isSneaking) { //Only does this part if the player isn't sneaking
+        }
+        else if ((playerStamina < playerMaxStamina) && !isSneaking)
+        { //Only does this part if the player isn't sneaking
             playerSpeed = maxSpeed;
             RegenerateStamina();
             MoveAround();
