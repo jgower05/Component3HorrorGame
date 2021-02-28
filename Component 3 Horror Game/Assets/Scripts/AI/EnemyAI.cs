@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
@@ -34,9 +35,9 @@ public class EnemyAI : MonoBehaviour
     public Transform previousWaypoint;
     public float damageTaken = 0.0f;
 
-    private Vector3 positionOfPoint;
+    public Vector3 positionOfPoint;
     public bool chooseNewWaypoint = true;
-    Random random = new Random();
+    System.Random random = new System.Random();
     private GameObject investigatePoint;
 
     private Selectors rootNode;
@@ -304,6 +305,7 @@ public class EnemyAI : MonoBehaviour
         if (Vector3.Distance(transform.position, positionOfPoint) > 3f)
         {
             newPath = RequestPath(transform.position, positionOfPoint);
+            if (newPath == null) { throw new NullReferenceException("No path generated"); }
             MoveAlongPath(enemySpeed);
             return NodeStates.RUNNING;
         }

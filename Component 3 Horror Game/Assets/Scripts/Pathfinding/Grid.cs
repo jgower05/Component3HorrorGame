@@ -9,6 +9,7 @@ public class Grid : MonoBehaviour
     public LayerMask unwalkableMask;
     public Vector2 gridWorldSize;
     public float nodeRadius;
+    public Transform enemy;
     AStarNode[,] grid;
 
     float nodeDiameter;
@@ -79,9 +80,13 @@ public class Grid : MonoBehaviour
     void OnDrawGizmos() {
         Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
         if (grid != null) {
+            AStarNode enemyNode = NodeFromWorldPoint(enemy.position);
             foreach (AStarNode node in grid) {
                 //Colour each node either white (walkable)or red (unwalkable) 
                 Gizmos.color = (node.isWalkable) ? Color.white : Color.red;
+                if (node.worldPosition == enemyNode.worldPosition) {
+                    Gizmos.color = Color.blue;
+                }
                 if (path != null) {
                     if (path.Contains(node)) {
                         Gizmos.color = Color.black;

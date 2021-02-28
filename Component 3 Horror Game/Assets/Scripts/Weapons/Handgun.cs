@@ -21,6 +21,10 @@ public class Handgun : Gun
     public WeaponRecoil weaponRecoil;
 
     public AudioManager audioManager;
+    public GameObject muzzleFlash, muzzleFlashLight;
+    private Vector3 originalPosition;
+    public Vector3 aimPosition;
+    public float adsSpeed = 8f;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +34,8 @@ public class Handgun : Gun
         ReloadTime = 0.25f;
         FiringTime = 0.15f;
         Damage = gunDamage;
+
+        originalPosition = transform.localPosition;
     }
 
     // Update is called once per frame
@@ -40,6 +46,8 @@ public class Handgun : Gun
             Fire();
             weaponRecoil.Fire();
             cameraRecoil.Fire();
+            muzzleFlash.SetActive(true);
+            muzzleFlashLight.SetActive(true);
             audioManager.Play("Handgun Fire");
         }
         else if (Input.GetMouseButtonDown(0) && this.magazineCount <= 0 && !hasFired && !reloading) {
@@ -51,13 +59,16 @@ public class Handgun : Gun
 
         if (Input.GetKeyDown(KeyCode.R)) {
             Reload();
-            audioManager.Play("Handgun Reload");
         }
+
+        AimDownSight();
 
         if (hasFired) {
             firingCooldownTimer -= Time.deltaTime;
             if (firingCooldownTimer <= 0f) {
                 hasFired = false;
+                muzzleFlash.SetActive(false);
+                muzzleFlashLight.SetActive(false);
             }
         }
         if (reloading) {
@@ -65,6 +76,17 @@ public class Handgun : Gun
             if (reloadTimer <= 0f) {
                 reloading = false;
             }
+        }
+    }
+
+    //Move gun to allow the player to aim down the sight
+    private void AimDownSight() {
+        if (Input.GetMouseButton(1) && !reloading)
+        {
+            transform.localPosition = Vector3.Lerp(transform.localPosition, aimPosition, Time.deltaTime * adsSpeed);
+        }
+        else {
+            transform.localPosition = Vector3.Lerp(transform.localPosition, originalPosition, Time.deltaTime * adsSpeed);
         }
     }
 
@@ -91,10 +113,12 @@ public class Handgun : Gun
         {
             this.magazineCount = ammoCount;
             ammoCount = 0;
+            audioManager.Play("Handgun Reload");
         }
         else if (magazineCount > 0) {
             ammoCount -= MagazineCount - this.magazineCount;
             this.magazineCount = MagazineCount;
+            audioManager.Play("Handgun Reload");
         }
         else if (ammoCount <= 0)
         {
@@ -104,6 +128,7 @@ public class Handgun : Gun
         {
             this.magazineCount = MagazineCount;
             ammoCount -= MagazineCount;
+            audioManager.Play("Handgun Reload");
         }
     }
 }

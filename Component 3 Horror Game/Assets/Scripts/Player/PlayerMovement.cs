@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
@@ -19,9 +20,8 @@ public class PlayerMovement : MonoBehaviour
     public Slider slider;
     public Slider staminaSlider;
 
-    public float mouseSesitivity = 100f;
-    public Transform camera;
-    float xRotation = 0f;
+    PlayerControls controls;
+    Vector2 move;
 
     void Start() {
         //Sets the values for the Health Bar UI as soon as the game starts. 
@@ -32,24 +32,33 @@ public class PlayerMovement : MonoBehaviour
         staminaSlider.value = playerStamina;
     }
 
-    void FixedUpdate()
+    void Awake() {
+        controls = new PlayerControls();
+        controls.Player.Move.performed += ctx => move = ctx.ReadValue<Vector2>();
+        controls.Player.Move.canceled += ctx => move = Vector2.zero;
+    }
+
+    void Update()
     {
         slider.value = currentHealth;
         staminaSlider.value = playerStamina;
+        //Vector3 keyboardInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 
-        isRunning = Input.GetKey(KeyCode.LeftShift);
-        isSneaking = Input.GetKey(KeyCode.LeftControl);
+        /*if (move != Vector2.zero)
+        {
+            MoveAround(new Vector3(move.x, 0f, move.y));
+        }
         if (isSneaking)
         { //Checks if the player wants to sneak when they're holding down the left control key
             Debug.Log("Sneaking!");
             playerSpeed = maxSpeed - 1.5f;
-            MoveAround();
+            MoveAround(keyboardInput);
             RegenerateStamina();
         }
         if ((isRunning && Input.GetKey(KeyCode.W)) && playerStamina > 0.0f)
         {
             playerSpeed = maxSpeed + 1.5f;
-            MoveAround();
+            MoveAround(keyboardInput);
             playerStamina = Mathf.Clamp(playerStamina - (20.0f * Time.deltaTime), 0.0f, playerMaxStamina);
             staminaRegenTimer = 0.0f;
         }
@@ -57,9 +66,13 @@ public class PlayerMovement : MonoBehaviour
         { //Only does this part if the player isn't sneaking
             playerSpeed = maxSpeed;
             RegenerateStamina();
-            MoveAround();
-        }
-        MoveAround();
+            MoveAround(keyboardInput);
+        } */
+        Vector3 input = new Vector3(move.x, 0, move.y);
+        Vector3 direction = input.normalized;
+        Vector3 velocity = playerSpeed * direction;
+        Vector3 moveAmount = velocity * Time.deltaTime;
+        transform.Translate(moveAmount);
     }
 
     void RegenerateStamina() { //Regenerates stamina over time once the regen timer allows it to.
@@ -73,8 +86,8 @@ public class PlayerMovement : MonoBehaviour
     }
 
     //Move the player around towards direction they've inputted (WASD)
-    void MoveAround() {
-        Vector3 input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+    void MoveAround(Vector3 input) {
+        //Vector3 input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
         Vector3 direction = input.normalized;
         Vector3 velocity = playerSpeed * direction;
         Vector3 moveAmount = velocity * Time.deltaTime;
