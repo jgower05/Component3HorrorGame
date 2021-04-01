@@ -18,6 +18,9 @@ public class PlayerController : MonoBehaviour
     public float cameraMinimumY = -60f;
     public float cameraMaximumY = 75f;
     public float rotationSmoothSpeed = 10f;
+    public float maxHealth = 100f;
+    public float currentHealth = 100f;
+
     public bool isRunning = false;
     public bool isSneaking = false;
     public Transform camera;
@@ -41,6 +44,18 @@ public class PlayerController : MonoBehaviour
     }
 
     void Update() {
+
+        if (isRunning && playerStamina > 0.0f)
+        {
+            playerSpeed = 5f;
+            playerStamina = Mathf.Clamp(playerStamina - (20.0f * Time.deltaTime), 0.0f, playerMaxStamina);
+            playerStaminaRegenTimer = 0f;
+        }
+        else if(!isRunning) {
+            playerSpeed = playerMaxSpeed;
+            RegenerateStamina();
+        }
+
         Move();
         LookRotation();
     }
@@ -53,6 +68,16 @@ public class PlayerController : MonoBehaviour
         Vector3 input = new Vector3(move.x, 0f, move.y);
         Vector3 moveAmount = playerSpeed * input.normalized;
         transform.Translate(moveAmount * Time.deltaTime);
+    }
+
+    void RegenerateStamina() {
+        if (playerStaminaRegenTimer >= playerTimeToRegen)
+        {
+            playerStamina = Mathf.Clamp(playerStamina + (10.0f * Time.deltaTime), 0.0f, playerMaxStamina);
+        }
+        else {
+            playerStaminaRegenTimer += Time.deltaTime;
+        }
     }
 
     void LookRotation() {

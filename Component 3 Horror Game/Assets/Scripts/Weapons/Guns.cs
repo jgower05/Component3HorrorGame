@@ -19,7 +19,8 @@ public class Guns : MonoBehaviour
     [SerializeField] private bool hasFired;
     [SerializeField] private bool triggerPulled;
     [SerializeField] private bool needsReloading;
-    [SerializeField] private bool reloading;
+    [SerializeField] private bool reloadingTriggered;
+    [SerializeField] private bool isReloading;
 
     [SerializeField] private Camera fpsCamera;
     [SerializeField] private GunRecoil gunRecoil;
@@ -45,10 +46,9 @@ public class Guns : MonoBehaviour
 
         controls = new PlayerControls();
         controls.Player.Fire.performed += ctx => triggerPulled = true;
-        controls.Player.Fire.performed += ctx => triggerPulled = false;
         controls.Player.Aim.performed += ctx => aimingDownSight = true;
         controls.Player.Aim.canceled += ctx => aimingDownSight = false;
-        controls.Player.Reload.performed += ctx => reloading = true;
+        controls.Player.Reload.performed += ctx => reloadingTriggered = true;
     }
 
     void Update() {
@@ -60,19 +60,15 @@ public class Guns : MonoBehaviour
             AimBack();
         }
 
-        if (reloading)
+        if (reloadingTriggered)
         {
             Reload();
-            reloadTimer -= Time.deltaTime;
-            if (reloadTimer <= 0f) {
-                reloading = false;
-                reloadTimer = 2f;
-            }
         }
 
-        if (triggerPulled && !hasFired && magazineCount > 0 && !reloading)
+        if (triggerPulled && !hasFired && magazineCount > 0 && !reloadingTriggered)
         {
             Fire();
+            magazineCount--;
             audioManager.Play(fireSound);
             weaponRecoil.Fire();
             gunRecoil.Fire();
@@ -81,6 +77,7 @@ public class Guns : MonoBehaviour
         }
         else if (triggerPulled && magazineCount <= 0) {
             audioManager.Play(emptySound);
+            triggerPulled = false;
         }
 
         if (hasFired) {
@@ -93,26 +90,36 @@ public class Guns : MonoBehaviour
                 muzzleFlashLight.SetActive(false);
             }
         }
+
+        if (isReloading) {
+            reloadTimer -= Time.deltaTime;
+            if (reloadTimer <= 0f)
+            {
+                isReloading = false;
+                reloadingTriggered = false;
+            }
+        }
     }
 
 
     //Allow the gun to fire a projectile
     public void Fire() {
         hasFired = true;
+        triggerPulled = false;
         RaycastHit hit;
         if (Physics.Raycast(fpsCamera.transform.position, fpsCamera.transform.forward, out hit, range)) {
             EnemyStats enemy = hit.transform.GetComponent<EnemyStats>();
             if (enemy != null) {
                 enemy.TakeDamage(gunDamage);
             }
-            this.magazineCount--;
-            triggerPulled = false;
+            //magazineCount--;
         }
     }
 
     //Allow the gun to be reloaded under certain conditions
     public void Reload() {
         //First check to see if the amount of ammo left is smaller than the maximum magazine size
+        isReloading = true;
         if ((ammoCount - magazineLimit) < 0)
         {
             magazineCount = ammoCount;
